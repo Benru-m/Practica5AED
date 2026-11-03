@@ -132,8 +132,15 @@ Empleado la función `summarise y across`, calcula la media, la desviación típ
 - Compara los resultados para los dos conjuntos en la variable `Petal.Length`.
 
 ```{r , include = TRUE}
+madm <- function(x){
+  return (1.4826 * median(abs(x-median(x,na.rm = TRUE)),na.rm = TRUE))
+}
+summary_clean <- clean_iris %>% summarise(across(where(is.numeric), list(media = mean, dt = sd, mediana = median, MADM = madm, IQR = IQR)))
 
+summary_dirty <- dirty_iris %>% summarise(across(where(is.numeric),list(media = ~mean(.x,na.rm=T), dt = ~sd(.x,na.rm=T), mediana = ~median(.x,na.rm=T), MADM = madm, IQR = ~IQR(.x,na.rm=T))))
 ```
+
+Comparando los análisis de `clean_iris` y `dirty_iris`, nos damos cuenta de que los estadísticos no coinciden en general, ya que en `clean_iris` hemos eliminado todos los registros con algún valor faltante, sin embargo esos registros podían contener valores numéricos en otras columnas y por tanto intervenir en sus estadísticos. En el caso de `Petal.Length`, vemos como cambian los valores de la media, la desviación estándar y el IQR, mientras que la mediana y el MADM mantienen su valor en ambos conjuntos.
 
 ## Ejercicio 5: Métodos de detección de outliers
 
