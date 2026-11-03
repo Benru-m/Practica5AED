@@ -107,7 +107,12 @@ dirty_iris <- dirty_iris %>% mutate(across(where(is.numeric),~ ifelse(!is.finite
 - Emplea después la función `na.omit` para quedarnos solo con las filas con datos completos en un nuevo data frame `clean_iris`.
 
 ```{r Solucion ejercicio 3, include=TRUE, echo=TRUE, eval=TRUE, results=TRUE}
+Ncompletos <- sum(complete.cases(dirty_iris))
+Percentcompletos <- 100*Ncompletos/nrow(dirty_iris)
 
+cat("Casos completos: ", Ncompletos, " Porcentaje: ",Percentcompletos,"%", sep ="")
+
+clean_iris <- na.omit(dirty_iris)
 ```
 
 # Detección de outliers univariante
