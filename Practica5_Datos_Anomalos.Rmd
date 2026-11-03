@@ -98,9 +98,7 @@ Reemplaza, en todas las columnas numéricas del data frame `dirty_iris`, los val
 ```{r Solucion ejercicio 2, include=TRUE, echo=TRUE, eval=TRUE, results=TRUE}
 # DEBEMOS ELIMINAR TAMBIEN LOS VALORES IGUALES A CERO YA QUE SE TRATA DE LONGITUDES DE PARTES DE UNA FLOR. NO PUEDEN SER O
 
-
-
-
+dirty_iris <- dirty_iris %>% mutate(across(where(is.numeric),~ ifelse(!is.finite(.)| . <= 0, NA, .)))
 ```
 
 ## Ejercicio 3: Valores perdidos y observaciones completas
