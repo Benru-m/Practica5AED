@@ -193,9 +193,9 @@ Utiliza la función `mutate` y `across` para identificar los outliers en la vari
 
 ```{r Solucion ejercicio 6, include=TRUE, echo=TRUE, eval=TRUE, results=TRUE}
 #Añaden al dataframe una columna lógica, con TRUE si el dato es un outlier según el método usado y FALSE en caso contrario
-outliersPL_dirty <- dirty_iris %>% mutate(across(Petal.Length, list(Reglasigma = reglasigma, ReglaHampel = reglahampel, ReglaBoxplot = reglaboxplot, ReglaPercentil = reglapercentil)))
+dirty_iris <- dirty_iris %>% mutate(across(Petal.Length, list(Reglasigma = reglasigma, ReglaHampel = reglahampel, ReglaBoxplot = reglaboxplot, ReglaPercentil = reglapercentil)))
 
-outliersPL_clean <- clean_iris %>% mutate(across(Petal.Length, list(Reglasigma = reglasigma, ReglaHampel = reglahampel, ReglaBoxplot = reglaboxplot, ReglaPercentil = reglapercentil)))
+clean_iris <- clean_iris %>% mutate(across(Petal.Length, list(Reglasigma = reglasigma, ReglaHampel = reglahampel, ReglaBoxplot = reglaboxplot, ReglaPercentil = reglapercentil)))
 
 ```
 
@@ -207,6 +207,8 @@ En los métodos de detección de outliers analizados, examina los resultados com
 - Los valores etiquetados como outliers (ordenados de menor a mayor).
 
 ```{r Solucion ejercicio 7, include=TRUE, echo=TRUE, eval=TRUE, results=TRUE}
+#Numero de outliers
+clean_iris %>%summarise(across(c(Petal.Length_Reglasigma, Petal.Length_ReglaHampel, Petal.Length_ReglaBoxplot, Petal.Length_ReglaPercentil),~ sum(. == TRUE, na.rm = TRUE)))
 
 ```
 
