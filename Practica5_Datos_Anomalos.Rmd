@@ -159,16 +159,14 @@ Escribe una función que detecte los outliers de un vector $x$ para cada uno de 
 reglasigma <- function(x){
   mu <- mean(x,na.rm =T)
   sigma <- sd(x,na.rm = T)
-  x <- x[!is.na(x)]
-  outliers <- x[where(abs(x-mu) > 3*sigma)]
+  outliers <- abs(x-mu) > 3*sigma  #vector lógico
   return(outliers)
 }
 # Identificador Hampel
 reglahampel <- function(x) {
-  mediana <- median(x,na.rm)
+  mediana <- median(x,na.rm = T)
   MADM <- madm(x)
-  x <- x[!is.na(x)]
-  outliers <- x[where(abs(x-mediana) > 3*MADM)]
+  outliers <- abs(x-mediana) > 3*MADM   #vector lógico
   return(outliers)
 }
 # Regla boxplot
@@ -176,8 +174,7 @@ reglaboxplot <- function(x){
   Q1 <- quantile(x,0.25,na.rm = T)
   Q3 <- quantile(x,0.75,na.rm = T)
   IQR <- Q3-Q1
-  x <- x[!is.na(x)]
-  outliers <- x[where(x > Q3 + 1.5*IQR | x < Q1 - 1.5*IQR)]
+  outliers <- x > Q3 + 1.5*IQR | x < Q1 - 1.5*IQR   #vector lógico
   return(outliers)
 }
 
@@ -185,8 +182,7 @@ reglaboxplot <- function(x){
 reglapercentil <- function(x){
   p5 <- quantile(x,0.05,na.rm =T)
   p95 <- quantile(x,0.95,na.rm =T)
-  x <- x[!is.na(x)]
-  outliers <- x[where(x > p95 | x < p5)]
+  outliers <- x > p95 | x < p5   #vector lógico
   return(outliers)
 }
 ```
@@ -196,8 +192,10 @@ reglapercentil <- function(x){
 Utiliza la función `mutate` y `across` para identificar los outliers en la variable `Petal.Length` con todos los métodos de detección de outliers implementados. Genera una columna nueva para cada método. Nota: podría extenderse la aplicación a todas las variables numéricas usando también `mutate`, `across` y `where`.
 
 ```{r Solucion ejercicio 6, include=TRUE, echo=TRUE, eval=TRUE, results=TRUE}
+#Añaden al dataframe una columna lógica, con TRUE si el dato es un outlier según el método usado y FALSE en caso contrario
+outliersPL_dirty <- dirty_iris %>% mutate(across(Petal.Length, list(Reglasigma = reglasigma, ReglaHampel = reglahampel, ReglaBoxplot = reglaboxplot, ReglaPercentil = reglapercentil)))
 
-
+outliersPL_clean <- clean_iris %>% mutate(across(Petal.Length, list(Reglasigma = reglasigma, ReglaHampel = reglahampel, ReglaBoxplot = reglaboxplot, ReglaPercentil = reglapercentil)))
 
 ```
 
